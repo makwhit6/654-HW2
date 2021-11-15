@@ -189,6 +189,20 @@ blueprint_oregon <- recipe(x     = oregon,
 ###Check the dataset for missingness. If there is any variable with more than 75% missingness, remove these variables.
 ```{r 2.1}
 
+missing <- ff_glimpse(oregon)$Continuous
+
+head(missing)
+
+#flagging missing variables 
+
+flag_na <- which(as.numeric(missing$missing_percent) > 75)
+flag_na
+
+# Remove the flagged variables with more than 75% missingness
+
+ordata <- oregon[,-flag_na]
+
+
 
 ```
 
@@ -196,7 +210,16 @@ blueprint_oregon <- recipe(x     = oregon,
 ###Split the original data into two subsets: training and test. Let the training data have the 80% of cases and the test data have the 20% of the cases.
 ```{r 2.2}
 
+set.seed(11152021)  # for reproducibility
+  
+loc      <- sample(1:nrow(ordata), round(nrow(ordata) * 0.8))
+ordata_train  <- ordata[loc, ]
+ordata_test  <- ordata[-loc, ]
 
+#train the blueprint
+prepare <- prep(blueprint_oregon, 
+                training = ordata_train)
+prepare
 
 ```
 
