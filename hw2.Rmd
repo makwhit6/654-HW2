@@ -217,9 +217,10 @@ ordata_train  <- ordata[loc, ]
 ordata_test  <- ordata[-loc, ]
 
 #train the blueprint
-prepare <- prep(blueprint_oregon, 
-                training = ordata_train)
-prepare
+#RL note: I think we don't need prepare when we are using caret
+#prepare <- prep(blueprint_oregon, 
+#                training = ordata_train)
+#prepare
 
 ```
 
@@ -227,7 +228,42 @@ prepare
 ###Use the caret::train() function to train a model with 10-fold cross-validation to predict the scores using linear regression without any regularization. Evaluate the performance of the model on both training and test datasets. Evaluate and report RMSE, R-square, and MAE for both training and test datasets. Is there any evidence of overfitting?
 ```{r 2.3}
 
+# Randomly shuffle the data
 
+ordata_train = ordata_train[sample(nrow(ordata_train)),]
+
+# Create 10 folds with equal size
+
+folds = cut(seq(1,nrow(ordata_train)),breaks=10,labels=FALSE)
+
+# Create the list for each fold 
+
+my.indices <- vector('list',10)
+for(i in 1:10){
+  my.indices[[i]] <- which(folds!=i)
+}
+
+cv <- trainControl(method = "cv",
+                   index  = my.indices)
+
+caret_mod <- caret::train(blueprint_oregon, 
+                          data      = ordata_train, 
+                          method    = "lm", 
+                          trControl = cv)
+
+caret_mod
+
+#getting errors in this section
+predicted_te <- predict(caret_mod, ordata_test)
+
+rsq_te <- cor(ordata_test$target,predicted_te)^2
+rsq_te
+
+mae_te <- mean(abs(ordata_test$target - predicted_te))
+mae_te
+
+rmse_te <- sqrt(mean((ordata_test$target - predicted_te)^2))
+rmse_te
 
 ```
 
@@ -235,6 +271,32 @@ prepare
 ###Use the caret::train() function to train a model with 10-fold cross-validation to predict the scores using ridge regression. Try different values of lambda to decide optimal value. Evaluate the performance of the model on the test dataset, and report RMSE, R-square, and MAE. Does ridge regression provide any improvement over linear regression with no regularization?
 ```{r 2.4}
 
+grid <- data.frame(alpha = 0, lambda = seq(0.01,3,.01)) 
+grid
+
+
+# Train the model
+
+ridge <- caret::train(blueprint_oregon, 
+                      data      = ordata_train, 
+                      method    = "glmnet", 
+                      trControl = cv,
+                      tuneGrid  = grid)
+
+ridge$bestTune
+
+#getting errors in this section
+predict_te_ridge <- predict(ridge, ordata_test)
+
+rsq_te <- cor(ordata_test$target,predict_te_ridge)^2
+rsq_te
+
+mae_te <- mean(abs(ordata_test$target - predict_te_ridge))
+mae_te
+
+rmse_te <- sqrt(mean((ordata_test$target - predict_te_ridge)^2))
+rmse_te
+  
 
 
 ```
@@ -243,6 +305,31 @@ prepare
 ###Use the caret::train() function to train a model with 10-fold cross-validation to predict the scores using lasso regression. Try different values of lambda to decide optimal value. Evaluate the performance of the model on the test dataset, and report RMSE, R-square, and MAE. Does lasso regression provide any improvement over linear regression with no regularization?
 ```{r 2.5}
 
+grid <- data.frame(alpha = 1, lambda = seq(0.001,0.015,.001)) 
+
+grid
+
+# Train the model
+
+lasso <- caret::train(blueprint_oregon, 
+                       data      = ordata_train, 
+                       method    = "glmnet", 
+                       trControl = cv,
+                       tuneGrid  = grid)
+
+lasso$bestTune
+
+#getting errors in this section
+predict_te_lasso<- predict(lasso, ordata_test)
+
+rsq_te <- cor(ordata_test$target,predict_te_lasso)^2
+rsq_te
+
+mae_te <- mean(abs(ordata_test$target - predict_te_lasso))
+mae_te
+
+rmse_te <- sqrt(mean((ordata_test$target - predict_te_lasso)^2))
+rmse_te
 
 
 ```
