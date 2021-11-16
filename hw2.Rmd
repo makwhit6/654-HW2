@@ -66,7 +66,11 @@ blueprint_tweet <- recipe(x  = tweet,
 
 ```{r 1.1, echo=FALSE}
 
-
+loc      <- sample(1:nrow(tweet), round(nrow(tweet) * 0.8))
+#training dataset
+tweet_tr  <- tweet[loc, ]
+#testing dataset
+tweet_te  <- tweet[-loc, ]
 
 ```
 
@@ -74,6 +78,37 @@ blueprint_tweet <- recipe(x  = tweet,
 ###Use the caret::train() function to train a model with 10-fold cross-validation for predicting the probability of sentiment being positive using logistic regression without any regularization. Evaluate and report the performance of the model on the test dataset.
 ```{r 1.2}
 
+set.seed(11142021) # for reproducibility
+
+tweet_tr = tweet_tr[sample(nrow(tweet_tr)),]
+
+# Create 10 folds with equal size
+
+folds = cut(seq(1,nrow(tweet_tr)),breaks=10,labels=FALSE)
+
+# Create the list for each fold 
+
+my.indices <- vector('list',10)
+for(i in 1:10){
+  my.indices[[i]] <- which(folds!=i)
+}
+
+
+cv <- trainControl(method    = "cv",
+                   index           = my.indices,
+                   classProbs      = TRUE,
+                   summaryFunction = mnLogLoss)
+
+# Train the model
+
+caret_mod <- caret::train(blueprint_tweet, 
+                          data      = tweet_tr, 
+                          method    = "glm",
+                          family    = 'binomial',
+                          metric    = 'logLoss',
+                          trControl = cv)
+
+caret_mod
 
 ```
 
