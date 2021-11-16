@@ -346,7 +346,17 @@ rmse_te
 ##Task 2.7 
 ###For the model you decided in 2.6, find and report the most important 10 predictors of test scores and their regression coefficients. Briefly comment which variables seem to be the most important predictors.
 ```{r 2.7}
+#sample of process; will need to replace lasso with the model we choose
+coefs <- coef(lasso2$finalModel,lasso2$bestTune$lambda)
 
+coefs.zero <- coefs[which(coefs[,1]==0),]
+length(coefs.zero)
+
+coefs.nonzero <- coefs[which(coefs[,1]!=0),]
+length(coefs.nonzero)
+
+ind   <- order(abs(coefs.nonzero),decreasing=T)
+head(as.matrix(coefs.nonzero[ind[-1]]),10)
 
 
 ```
