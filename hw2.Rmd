@@ -347,19 +347,24 @@ caret_mod <- caret::train(blueprint_oregon,
                           trControl = cv)
 
 caret_mod
+#   RMSE      Rsquared   MAE     
+#  89.67962  0.4009841  69.53005
 
-#getting errors in this section
 predicted_te <- predict(caret_mod, ordata_test)
 
 nr_rsq_te <- cor(ordata_test$score,predicted_te)^2
 nr_rsq_te
+# 0.4063456
 
 nr_mae_te <- mean(abs(ordata_test$score - predicted_te))
 nr_mae_te
-
+#69.3389
 nr_rmse_te <- sqrt(mean((ordata_test$score - predicted_te)^2))
 nr_rmse_te
+#89.11403
 
+#RSQ for training data (40%) similar to RSQ for testing data (41%), suggesting
+# the model is not overfitted to the training data.
 ```
 
 ##Task 2.4. 
