@@ -295,8 +295,8 @@ flag_na <- which(as.numeric(missing$missing_percent) > 75)
 flag_na
 
 # Remove the flagged variables with more than 75% missingness
-
-ordata <- oregon[,-flag_na]
+#no need since there are no variables that meet this criteria
+#ordata <- oregon[,-flag_na]
 
 
 ```
@@ -307,9 +307,9 @@ ordata <- oregon[,-flag_na]
 
 set.seed(11152021)  # for reproducibility
   
-loc      <- sample(1:nrow(ordata), round(nrow(ordata) * 0.8))
-ordata_train  <- ordata[loc, ]
-ordata_test  <- ordata[-loc, ]
+loc      <- sample(1:nrow(oregon), round(nrow(oregon) * 0.8))
+ordata_train  <- oregon[loc, ]
+ordata_test  <- oregon[-loc, ]
 
 #train the blueprint
 #RL note: I think we don't need prepare when we are using caret
@@ -351,14 +351,14 @@ caret_mod
 #getting errors in this section
 predicted_te <- predict(caret_mod, ordata_test)
 
-rsq_te <- cor(ordata_test$target,predicted_te)^2
-rsq_te
+nr_rsq_te <- cor(ordata_test$score,predicted_te)^2
+nr_rsq_te
 
-mae_te <- mean(abs(ordata_test$target - predicted_te))
-mae_te
+nr_mae_te <- mean(abs(ordata_test$score - predicted_te))
+nr_mae_te
 
-rmse_te <- sqrt(mean((ordata_test$target - predicted_te)^2))
-rmse_te
+nr_rmse_te <- sqrt(mean((ordata_test$score - predicted_te)^2))
+nr_rmse_te
 
 ```
 
@@ -383,14 +383,14 @@ ridge$bestTune
 #getting errors in this section
 predict_te_ridge <- predict(ridge, ordata_test)
 
-rsq_te <- cor(ordata_test$target,predict_te_ridge)^2
-rsq_te
+r_rsq_te <- cor(ordata_test$score,predict_te_ridge)^2
+r_rsq_te
 
-mae_te <- mean(abs(ordata_test$target - predict_te_ridge))
-mae_te
+r_mae_te <- mean(abs(ordata_test$score - predict_te_ridge))
+r_mae_te
 
-rmse_te <- sqrt(mean((ordata_test$target - predict_te_ridge)^2))
-rmse_te
+r_rmse_te <- sqrt(mean((ordata_test$score - predict_te_ridge)^2))
+r_rmse_te
   
 
 
@@ -417,14 +417,14 @@ lasso$bestTune
 #getting errors in this section
 predict_te_lasso<- predict(lasso, ordata_test)
 
-rsq_te <- cor(ordata_test$target,predict_te_lasso)^2
-rsq_te
+l_rsq_te <- cor(ordata_test$score,predict_te_lasso)^2
+l_rsq_te
 
-mae_te <- mean(abs(ordata_test$target - predict_te_lasso))
-mae_te
+l_mae_te <- mean(abs(ordata_test$score - predict_te_lasso))
+l_mae_te
 
-rmse_te <- sqrt(mean((ordata_test$target - predict_te_lasso)^2))
-rmse_te
+l_rmse_te <- sqrt(mean((ordata_test$score - predict_te_lasso)^2))
+l_rmse_te
 
 
 ```
