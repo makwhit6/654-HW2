@@ -390,15 +390,15 @@ predict_te_ridge <- predict(ridge, ordata_test)
 
 r_rsq_te <- cor(ordata_test$score,predict_te_ridge)^2
 r_rsq_te
-
+# 0.4062631
 r_mae_te <- mean(abs(ordata_test$score - predict_te_ridge))
 r_mae_te
-
+# 69.35026
 r_rmse_te <- sqrt(mean((ordata_test$score - predict_te_ridge)^2))
 r_rmse_te
-  
+# 89.12628  
 
-
+#Ridge regression produced very similar results as regression with no regularization.
 ```
 
 ##Task 2.5. 
@@ -424,14 +424,15 @@ predict_te_lasso<- predict(lasso, ordata_test)
 
 l_rsq_te <- cor(ordata_test$score,predict_te_lasso)^2
 l_rsq_te
-
+#0.4061835
 l_mae_te <- mean(abs(ordata_test$score - predict_te_lasso))
 l_mae_te
-
+# 69.34796
 l_rmse_te <- sqrt(mean((ordata_test$score - predict_te_lasso)^2))
 l_rmse_te
+# 89.12685
 
-
+#Lasso regression produced similar results as regression with no regularization.
 ```
 
 ##Task 2.6 
@@ -446,8 +447,8 @@ l_rmse_te
 ##Task 2.7 
 ###For the model you decided in 2.6, find and report the most important 10 predictors of test scores and their regression coefficients. Briefly comment which variables seem to be the most important predictors.
 ```{r 2.7}
-#sample of process; will need to replace lasso with the model we choose
-coefs <- coef(lasso2$finalModel,lasso2$bestTune$lambda)
+#using Linear Regression with Ridge Penalty 
+coefs <- coef(ridge$finalModel,ridge$bestTune$lambda)
 
 coefs.zero <- coefs[which(coefs[,1]==0),]
 length(coefs.zero)
@@ -458,6 +459,7 @@ length(coefs.nonzero)
 ind   <- order(abs(coefs.nonzero),decreasing=T)
 head(as.matrix(coefs.nonzero[ind[-1]]),10)
 
-
+#The most important predictors seem to be indicators of TAG education, special education, 
+# some ethnic codes
 ```
 
