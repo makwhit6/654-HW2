@@ -296,7 +296,6 @@ flag_na
 
 # Remove the flagged variables with more than 75% missingness
 #no need since there are no variables that meet this criteria
-#ordata <- oregon[,-flag_na]
 
 
 ```
@@ -363,6 +362,7 @@ nr_rmse_te <- sqrt(mean((ordata_test$score - predicted_te)^2))
 nr_rmse_te
 #89.11403
 
+
 #RSQ for training data (40%) similar to RSQ for testing data (41%), suggesting
 # the model is not overfitted to the training data.
 ```
@@ -398,6 +398,7 @@ r_rmse_te <- sqrt(mean((ordata_test$score - predict_te_ridge)^2))
 r_rmse_te
 # 89.12628  
 
+
 #Ridge regression produced very similar results as regression with no regularization.
 ```
 
@@ -432,6 +433,7 @@ l_rmse_te <- sqrt(mean((ordata_test$score - predict_te_lasso)^2))
 l_rmse_te
 # 89.12685
 
+
 #Lasso regression produced similar results as regression with no regularization.
 ```
 
@@ -439,7 +441,26 @@ l_rmse_te
 ###Evaluate the performance of the models in 2.2, 2.3, and 2.4 on the test dataset. Calculate and report the root mean squared error (RMSE), mean absolute error (MAE), and R-square. Summarize these numbers in a table like the following. Decide and comment on which model you would use to predict scores.
 ```{r 2.6}
 
+logreg <- data.frame(Model = c("Linear Regression"),
+                    RMSE = c(nr_rmse_te),
+                     MAE = c(nr_mae_te),
+                     Rsq = c(nr_rsq_te))
 
+ridgereg <- data.frame(Model = c("Linear Regression with Ridge Penalty"),
+                    RMSE = c(r_rmse_te),
+                     MAE = c(r_mae_te),
+                     Rsq = c(r_rsq_te))
+
+lassoreg <- data.frame(Model = c("Linear Regression with Lasso Penalty"),
+                    RMSE = c(l_rmse_te),
+                     MAE = c(l_mae_te),
+                     Rsq = c(l_rsq_te))
+
+#Final Table
+ModEvalTable <- rbind(logreg, ridgereg, lassoreg)
+ModEvalTable
+
+#Explanation of model choice
 
 
 ```
