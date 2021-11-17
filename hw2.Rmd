@@ -110,6 +110,54 @@ caret_mod <- caret::train(blueprint_tweet,
 
 caret_mod
 
+# Predict the probabilities for the observations in the test dataset
+
+predicted_te <- predict(caret_mod, tweet_te, type='prob')
+
+dim(predicted_te)
+head(predicted_te)
+
+#Calculate LogLoss
+nr_ll_te <-
+
+#Calculate the AUC
+#install.packages("cutpointr")
+require(cutpointr)
+
+cut.obj <- cutpointr(x     = predicted_te$Positive,
+                     class = tweet_te$sentiment)
+
+nr_auc_te <- auc(cut.obj)
+#0.698213
+
+# Confusion matrix assuming the threshold is 0.5 for evaluation metric calculations
+
+pred_class <- ifelse(predicted_te$Positive>.5,1,0)
+
+confusion <- table(tweet_te$sentiment,pred_class)
+
+confusion
+
+#Calculate Overall Accuracy
+nr_acc_te <-
+
+#Calculate True Negative Rate
+nr_tnr_te <- confusion[1,1]/(confusion[1,1]+confusion[1,2])
+#0.6756757
+
+#Calculate False Positive Rate
+nr_fpr_te <- confusion[1,2]/(confusion[1,1]+confusion[1,2])
+#0.3243243
+
+#Calculate True Positive Rate
+nr_tpr_te <- confusion[2,2]/(confusion[2,1]+confusion[2,2])
+#0.6578947
+
+#Calculate Precision
+nr_pre_te <- confusion[2,2]/(confusion[1,2]+confusion[2,2])
+#0.6756757
+
+
 ```
 
 ##Task 1.3. 
@@ -146,6 +194,49 @@ plot(caret_logistic_ridge)
 #Optimal value of ridge
 caret_logistic_ridge$bestTune
 
+# Predict the probabilities for the observations in the test dataset
+
+predicted_ridge <- predict(caret_logistic_ridge, tweet_te, type='prob')
+
+dim(predicted_ridge)
+head(predicted_ridge)
+
+#Calculate LogLoss
+r_ll_te <-
+
+#Calculate the AUC
+#install.packages("cutpointr")
+require(cutpointr)
+
+cut.obj <- cutpointr(x     = predicted_ridge$Positive,
+                     class = tweet_te$sentiment)
+
+r_auc_te <- auc(cut.obj)
+#0.9062055
+
+# Confusion matrix assuming the threshold is 0.5 for evaluation metric calculations
+
+pred_class_ridge <- ifelse(predicted_ridge$Positive>.5,1,0)
+
+confusion_ridge <- table(tweet_te$sentiment,pred_class_ridge)
+
+confusion_ridge
+
+#Calculate Overall Accuracy
+r_acc_te <-
+
+#Calculate True Negative Rate
+r_tnr_te <- confusion_ridge[1,1]/(confusion_ridge[1,1]+confusion_ridge[1,2])
+#0.8175676
+
+#Calculate True Positive Rate
+r_tpr_te <- confusion_ridge[2,2]/(confusion_ridge[2,1]+confusion_ridge[2,2])
+#0.8552632
+
+#Calculate Precision
+r_pre_te <- confusion_ridge[2,2]/(confusion_ridge[1,2]+confusion_ridge[2,2])
+#0.8280255
+
 
 ```
 
@@ -162,12 +253,8 @@ cv_lasso <- trainControl(method    = "cv_lasso",
       
 # Hyperparameter tuning grid for ridge penalty (lambda), alpha = 0
 
-grid_ <- data.frame(alpha = 1, lambda = seq(0,.001,.00001)) 
+grid_ <- data.frame(alpha = 0, lambda = 0)
 grid_
-
-  # If you want to fit logistic regression you can also set lambda to 0
-  # grid <- data.frame(alpha = 0, lambda = 0) 
-  # This is equivalent to glm fit we did in the previous section
 
 # Train the model
   
@@ -177,7 +264,7 @@ caret_logistic_lasso <- caret::train(blueprint_tweet,
                                      family    = 'binomial',
                                      metric    = 'logLoss',
                                      trControl = cv_lasso,
-                                     tuneGrid  = grid)
+                                     tuneGrid  = grid_)
 
 caret_logistic_lasso
 
@@ -187,6 +274,49 @@ plot(caret_logistic_lasso)
 #optimal value of lasso penalty
 caret_logistic_lasso$bestTune
 
+# Predict the probabilities for the observations in the test dataset
+
+predicted_lasso <- predict(caret_logistic_lasso, tweet_te, type='prob')
+
+dim(predicted_lasso)
+head(predicted_lasso)
+
+#Calculate LogLoss
+l_ll_te <-
+
+#Calculate the AUC
+#install.packages("cutpointr")
+require(cutpointr)
+
+cut.obj <- cutpointr(x     = predicted_lasso$Positive,
+                     class = tweet_te$sentiment)
+
+l_auc_te <- auc(cut.obj)
+#0.8906028
+
+# Confusion matrix assuming the threshold is 0.5 for evaluation metric calculations
+
+pred_class_lasso <- ifelse(predicted_lasso$Positive>.5,1,0)
+
+confusion_lasso <- table(tweet_te$sentiment,pred_class_lasso)
+
+confusion_lasso
+
+#Calculate Overall Accuracy
+l_acc_te <-
+
+#Calculate True Negative Rate
+l_tnr_te <- confusion_lasso[1,1]/(confusion_lasso[1,1]+confusion_lasso[1,2])
+#0.7837838
+
+#Calculate True Positive Rate
+l_tpr_te <- confusion_lasso[2,2]/(confusion_lasso[2,1]+confusion_lasso[2,2])
+#0.8355263
+
+#Calculate Precision
+l_pre_te <- confusion_lasso[2,2]/(confusion_lasso[1,2]+confusion_lasso[2,2])
+#0.7987421
+
 
 ```
 
@@ -194,7 +324,35 @@ caret_logistic_lasso$bestTune
 ###Evaluate the performance of the models in 1.2, 1.3, and 1.4 on the test dataset. Calculate and report logLoss (LL), area under the reciever operating characteristic curver (AUC), overall accuracy (ACC), true positive rate (TPR), true negative rate (TNR), and precision (PRE) for three models. When calculating ACC, TPR, TNR, and PRE, assume that we use a cut-off value of 0.5 for the predicted probabilities. Summarize these numbers in a table like the following. Decide and comment on which model you would use to predict sentiment of a tweet moving forward.
 ```{r 1.5}
 
+logreg <- data.frame(Model = c("Logistic Regression"),
+                    LL = c(nr_ll_te),
+                     AUC = c(nr_auc_te),
+                     ACC = c(nr_acc_te),
+                    TPR = c(nr_tpr_te),
+                    TNR = c(nr_tnr_te),
+                    PRE = c(nr_pre_te))
 
+
+
+ridgelogreg <- data.frame(Model = c("Logistic Regression with Ridge Penalty"),
+                    LL = c(r_ll_te),
+                     AUC = c(r_auc_te),
+                     ACC = c(r_acc_te),
+                    TPR = c(r_tpr_te),
+                    TNR = c(r_tnr_te),
+                    PRE = c(r_pre_te))
+
+lassologreg <- data.frame(Model = c("Logistic Regression with Lasso Penalty"),
+                    LL = c(l_ll_te),
+                     AUC = c(l_auc_te),
+                     ACC = c(l_acc_te),
+                    TPR = c(l_tpr_te),
+                    TNR = c(l_tnr_te),
+                    PRE = c(l_pre_te))
+
+#Final Table
+EvalTable <- rbind(logreg, ridgelogreg, lassologreg)
+EvalTable
 
 ```
 
@@ -441,7 +599,7 @@ l_rmse_te
 ###Evaluate the performance of the models in 2.2, 2.3, and 2.4 on the test dataset. Calculate and report the root mean squared error (RMSE), mean absolute error (MAE), and R-square. Summarize these numbers in a table like the following. Decide and comment on which model you would use to predict scores.
 ```{r 2.6}
 
-logreg <- data.frame(Model = c("Linear Regression"),
+linreg <- data.frame(Model = c("Linear Regression"),
                     RMSE = c(nr_rmse_te),
                      MAE = c(nr_mae_te),
                      Rsq = c(nr_rsq_te))
@@ -457,7 +615,7 @@ lassoreg <- data.frame(Model = c("Linear Regression with Lasso Penalty"),
                      Rsq = c(l_rsq_te))
 
 #Final Table
-ModEvalTable <- rbind(logreg, ridgereg, lassoreg)
+ModEvalTable <- rbind(linreg, ridgereg, lassoreg)
 ModEvalTable
 
 #Explanation of model choice
