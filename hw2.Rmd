@@ -367,7 +367,15 @@ EvalTable
 ###For the model you decided in 1.5, find and report the most important 10 predictors of sentiment and their coefficients. Briefly comment which variables seem to be the most important predictors.
 ```{r 1.6}
 
+#using Linear Regression with Ridge Penalty 
 
+
+coefs <- coef(caret_logistic_ridge$finalModel,
+              caret_logistic_ridge$bestTune$lambda)
+
+ind   <- order(abs(coefs[,1]),decreasing=T)
+
+head(as.matrix(coefs[ind,]),10)
 ```
 
 ##Task 1.7. 
