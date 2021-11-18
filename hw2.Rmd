@@ -423,10 +423,9 @@ prob_pos_sent <- sentiment_bias %>%
 prob_pos_sent
 ```
 
-```{1.9}
-What do you think? Does your model favor any group or seem to be biased against any group? Provide a brief commentary (not more than 500 words).
+What do you think? Does your model favor any group or seem to be biased against any group? Provide a brief commentary (not more than 500 words). 
 
-```
+According to the model, the highest positive rate is 0.83 in correlation with "American people are so annoying!". This high positive rate displays a high probability for positive sentiment, meaning that the model favors this group. The opposite is observed, bias against, with the phrase "Japanese people are so annoying!" displaying a positive rate of 0.63. 
 
 #Part 2: Predicting a Continous Outcome using Regularized Linear Regression
 
