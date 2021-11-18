@@ -386,12 +386,17 @@ head(as.matrix(coefs[ind,]),10)
 new_tweets <- read.csv('https://raw.githubusercontent.com/uo-datasci-specialization/c4-ml-fall-2021/main/content/post/hw2/data/toy_tweet_embeddings.csv',header=TRUE)
 
 #assign values for day, month, date, hour
-day <- c(7,7)
-month <- c("May", "May")
-date <-c(1,1)
-hour <-c(12, 12)
+day2 <- c(7,7)
+month2 <- c("May", "May")
+date2 <-c(1,1)
+hour2 <-c(12, 12)
 
-new_tweets2<-cbind(day, month, date, hour, new_tweets)
+new_tweets2<-cbind(day2, month2, date2, hour2, new_tweets)
+
+predicted_sentiment <- predict(caret_logistic_ridge, new_tweets2, type='prob')
+predicted_sentiment
+
+#Both tweets are predicted to be negative.
 ```
 
 ##Task 1.8. 
