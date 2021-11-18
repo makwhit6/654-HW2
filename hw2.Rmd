@@ -261,7 +261,7 @@ cv_lasso <- trainControl(method    = "cv_lasso",
       
 # Hyperparameter tuning grid for ridge penalty (lambda), alpha = 0
 
-grid_ <- data.frame(alpha = 0, lambda = 0)
+grid_ <- data.frame(alpha = 1, lambda = seq(0,.001,.00001))
 grid_
 
 # Train the model
@@ -290,7 +290,7 @@ dim(predicted_lasso)
 head(predicted_lasso)
 
 #Calculate LogLoss
-l_ll_te <- 0.5876427
+l_ll_te <- 0.9642765
 
 #Calculate the AUC
 #install.packages("cutpointr")
@@ -300,7 +300,7 @@ cut.obj <- cutpointr(x     = predicted_lasso$Positive,
                      class = tweet_te$sentiment)
 
 l_auc_te <- auc(cut.obj)
-#0.8906028
+#0.8467857
 
 # Confusion matrix assuming the threshold is 0.5 for evaluation metric calculations
 
@@ -311,20 +311,20 @@ confusion_lasso <- table(tweet_te$sentiment,pred_class_lasso)
 confusion_lasso
 
 #Calculate Overall Accuracy
-l_acc_te <- (104+124)/(104+35+37+124)
+l_acc_te <- (126+101)/(126+101+39+34)
 #0.76
 
 #Calculate True Negative Rate
 l_tnr_te <- confusion_lasso[1,1]/(confusion_lasso[1,1]+confusion_lasso[1,2])
-#0.7837838
+#0.7214286
 
 #Calculate True Positive Rate
 l_tpr_te <- confusion_lasso[2,2]/(confusion_lasso[2,1]+confusion_lasso[2,2])
-#0.8355263
+#0.7875
 
 #Calculate Precision
 l_pre_te <- confusion_lasso[2,2]/(confusion_lasso[1,2]+confusion_lasso[2,2])
-#0.7987421
+# 0.7636364
 
 
 ```
