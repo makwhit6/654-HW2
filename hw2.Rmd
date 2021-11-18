@@ -543,7 +543,7 @@ caret_mod <- caret::train(blueprint_oregon,
                           method    = "lm", 
                           trControl = cv)
 
-caret_mod
+caret_mod$bestTune
 #   RMSE      Rsquared   MAE     
 #  89.67962  0.4009841  69.53005
 
@@ -659,15 +659,16 @@ ModEvalTable <- rbind(linreg, ridgereg, lassoreg)
 ModEvalTable
 
 #Explanation of model choice
-
+#A linear regression model without regulation was chosen due to its low RMSE score. 
 
 ```
 
 ##Task 2.7 
 ###For the model you decided in 2.6, find and report the most important 10 predictors of test scores and their regression coefficients. Briefly comment which variables seem to be the most important predictors.
 ```{r 2.7}
-#using Linear Regression with Ridge Penalty 
-coefs <- coef(ridge$finalModel,ridge$bestTune$lambda)
+#using Linear Regression with no regulation
+coefs <- coef(ridge$finalModel,
+              ridge$bestTune$lambda)
 
 coefs.zero <- coefs[which(coefs[,1]==0),]
 length(coefs.zero)
