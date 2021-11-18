@@ -661,14 +661,14 @@ ModEvalTable <- rbind(linreg, ridgereg, lassoreg)
 ModEvalTable
 
 #Explanation of model choice
-#A linear regression model without regulation was chosen due to its low RMSE score. 
+#A linear regression model with ridge penalty was chosen due to its low RMSE score. 
 
 ```
 
 ##Task 2.7 
 ###For the model you decided in 2.6, find and report the most important 10 predictors of test scores and their regression coefficients. Briefly comment which variables seem to be the most important predictors.
 ```{r 2.7}
-#using Linear Regression with no regulation
+#using Linear Regression with ridge penalty
 coefs <- coef(ridge$finalModel,
               ridge$bestTune$lambda)
 
