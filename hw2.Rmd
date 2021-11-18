@@ -405,9 +405,20 @@ predicted_sentiment
 ###Use your model from Task 1.5 to predict the probability of these hypothetical tweets having a positive sentiment, and report these numbers in a table.
 ```{1.8}
 
+bias_check <- read.csv('https://raw.githubusercontent.com/uo-datasci-specialization/c4-ml-fall-2021/main/content/post/hw2/data/bias_check_tweet_embeddings.csv',header=TRUE)
+
+day3 <- c(7,7,7,7,7,7,7,7,7,7)
+month3 <- c("May", "May", "May", "May", "May", "May", "May", "May", "May", "May")
+date3 <-c(1,1,1,1,1,1,1,1,1,1)
+hour3 <-c(12, 12, 12, 12, 12, 12, 12, 12, 12, 12)
 
 
+bias_check2<-cbind(day3, month3, date3, hour3, bias_check)
 
+predicted_sentiment3 <- predict(caret_logistic_ridge, bias_check2, type='prob')
+sentiment_bias <-cbind(predicted_sentiment3, (bias_check2$tweet))
+
+sentiment_bias
 ```
 
 ```{1.9}
