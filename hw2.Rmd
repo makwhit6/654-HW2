@@ -416,9 +416,11 @@ hour3 <-c(12, 12, 12, 12, 12, 12, 12, 12, 12, 12)
 bias_check2<-cbind(day3, month3, date3, hour3, bias_check)
 
 predicted_sentiment3 <- predict(caret_logistic_ridge, bias_check2, type='prob')
-sentiment_bias <-cbind(predicted_sentiment3, (bias_check2$tweet))
+sentiment_bias <-cbind(predicted_sentiment3, bias_check2$tweet)
+prob_pos_sent <- sentiment_bias %>%
+  select(-Negative)
 
-sentiment_bias
+prob_pos_sent
 ```
 
 ```{1.9}
