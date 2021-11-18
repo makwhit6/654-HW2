@@ -109,16 +109,14 @@ caret_mod <- caret::train(blueprint_tweet,
                           trControl = cv)
 
 caret_mod
-
+#  logLoss 
+#  9.362275
 # Predict the probabilities for the observations in the test dataset
 
 predicted_te <- predict(caret_mod, tweet_te, type='prob')
 
 dim(predicted_te)
 head(predicted_te)
-
-#Calculate LogLoss
-nr_ll_te <-
 
 #Calculate the AUC
 #install.packages("cutpointr")
@@ -202,7 +200,10 @@ dim(predicted_ridge)
 head(predicted_ridge)
 
 #Calculate LogLoss
-r_ll_te <-
+
+caret_logistic_ridge$bestTune
+#lambda   logLoss
+# 0.10000  0.4607315  
 
 #Calculate the AUC
 #install.packages("cutpointr")
