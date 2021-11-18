@@ -383,9 +383,15 @@ head(as.matrix(coefs[ind,]),10)
 ##Task 1.7. 
 ###Below are the two tweets I picked from my timeline. Use the model you decided in Task 1.5 to predict a probability that the sentiment being positive for these tweets. You are welcome to extract the word embeddings for these tweets by yourself (model: roberta-base, layer=12). Assume that all these tweets are posted on Saturday, May 1, 2021 at 12pm. For convenience, you can also download the dataset from the link below in case you have trouble in extracting the word embeddings.
 ```{r 1.7}
+new_tweets <- read.csv('https://raw.githubusercontent.com/uo-datasci-specialization/c4-ml-fall-2021/main/content/post/hw2/data/toy_tweet_embeddings.csv',header=TRUE)
 
+#assign values for day, month, date, hour
+day <- c(7,7)
+month <- c("May", "May")
+date <-c(1,1)
+hour <-c(12, 12)
 
-
+new_tweets2<-cbind(day, month, date, hour, new_tweets)
 ```
 
 ##Task 1.8. 
