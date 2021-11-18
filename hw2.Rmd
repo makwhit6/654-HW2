@@ -137,7 +137,8 @@ confusion <- table(tweet_te$sentiment,pred_class)
 confusion
 
 #Calculate Overall Accuracy
-nr_acc_te <-
+nr_acc_te <- (89+101)/(89+50+60+101)
+#0.6333333
 
 #Calculate True Negative Rate
 nr_tnr_te <- confusion[1,1]/(confusion[1,1]+confusion[1,2])
@@ -224,7 +225,8 @@ confusion_ridge <- table(tweet_te$sentiment,pred_class_ridge)
 confusion_ridge
 
 #Calculate Overall Accuracy
-r_acc_te <-
+r_acc_te <- (109+125)/(109+30+36+125)
+#0.78
 
 #Calculate True Negative Rate
 r_tnr_te <- confusion_ridge[1,1]/(confusion_ridge[1,1]+confusion_ridge[1,2])
@@ -304,7 +306,8 @@ confusion_lasso <- table(tweet_te$sentiment,pred_class_lasso)
 confusion_lasso
 
 #Calculate Overall Accuracy
-l_acc_te <-
+l_acc_te <- (104+124)/(104+35+37+124)
+#0.76
 
 #Calculate True Negative Rate
 l_tnr_te <- confusion_lasso[1,1]/(confusion_lasso[1,1]+confusion_lasso[1,2])
@@ -332,8 +335,6 @@ logreg <- data.frame(Model = c("Logistic Regression"),
                     TPR = c(nr_tpr_te),
                     TNR = c(nr_tnr_te),
                     PRE = c(nr_pre_te))
-
-
 
 ridgelogreg <- data.frame(Model = c("Logistic Regression with Ridge Penalty"),
                     LL = c(r_ll_te),
